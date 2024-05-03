@@ -1,0 +1,19 @@
+# Enables the mod_rewrite module
+RewriteEngine On
+
+# Sets the base directory for URL rewriting relative to /webproject/
+RewriteBase /webproject/
+
+# Condition that checks if the requested URL starts with "/public/" (case-insensitive)
+RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
+
+# If the condition is met, rewrites the requested URL to the captured part after "/public/"
+# The flags used are:
+#   - [L]: Stops processing further rewrite rules after this one is applied
+#   - [NE]: Prevents the environment variables from being passed to the rewritten URL
+#   - [R=302]: Sets the HTTP status code to 302 (Found), indicating a temporary redirect
+RewriteRule ^ %1 [L,NE,R=302]
+
+# Rule that rewrites any URL that doesn't start with "/public/" (case-insensitive)
+# It prepends "/public/" to the requested URL.
+RewriteRule ^((?!public/).*)$ public/$1 [L,NC]
